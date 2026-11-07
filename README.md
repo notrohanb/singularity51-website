@@ -45,7 +45,7 @@ supabase secrets set ALLOWED_ORIGINS=https://your-team.github.io
 
 ### 3. Turn on email alerts
 
-1. Create a free [Resend](https://resend.com) account **using ftc.fiftyone@gmail.com**. Until you verify a domain, Resend only delivers to the account's own address.
+1. Create a free [Resend](https://resend.com) account. Until you verify a domain, Resend only delivers to the address you signed up with, so set `CONTACT_TO` to that same address.
 2. Create an API key, then run:
 
 ```bash
@@ -66,7 +66,7 @@ The button changes from **Copy Message** to **Send Message**. Send a test messag
 
 ## Reading messages
 
-- **Email:** each message arrives at ftc.fiftyone@gmail.com. Hit reply to answer the sender directly.
+- **Email:** each message arrives at the address in the `CONTACT_TO` secret (Supabase → Edge Functions → Secrets). The sender's address is in the alert, so answer them from the team account, ftc.fiftyone@gmail.com.
 - **Database:** every message is in the Supabase dashboard under **Table Editor → contact_messages**, even if the email failed. Check `email_status` there: `sent`, `failed`, or `disabled` (no Resend key).
 
 ## Spam and privacy
