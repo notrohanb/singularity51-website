@@ -37,11 +37,10 @@ supabase db push
 supabase functions deploy contact --no-verify-jwt
 ```
 
-Then add the secrets. `ALLOWED_ORIGINS` is the site's address with **no path**, so `https://your-team.github.io`, not `.../your-repo/`.
+The function only accepts messages from the site in `SITE_ORIGINS`, at the top of `supabase/functions/contact/index.ts`, currently `https://notrohanb.github.io`. If the site moves, set this secret. Use the address with **no path**, so `https://your-team.github.io`, not `.../your-repo/`.
 
 ```bash
 supabase secrets set ALLOWED_ORIGINS=https://your-team.github.io
-supabase secrets set CONTACT_SALT=any-long-random-text
 ```
 
 ### 3. Turn on email alerts
@@ -72,7 +71,7 @@ The button changes from **Copy Message** to **Send Message**. Send a test messag
 
 ## Spam and privacy
 
-- Only the website address in `ALLOWED_ORIGINS` can use the form from a browser.
+- Only the allowed website address can use the form from a browser.
 - A hidden field catches simple bots.
 - Limits: 5 messages an hour from one connection, and 60 an hour across the whole site.
 - Visitors' IP addresses are never stored, only a salted hash used for the hourly limit.
@@ -80,7 +79,7 @@ The button changes from **Copy Message** to **Send Message**. Send a test messag
 
 The hourly sitewide limit means a spam flood can block real messages for up to an hour. Those visitors are told to email the team instead.
 
-**Never commit secrets.** The service key, Resend key, and salt live only in Supabase. The address in `config.js` is safe to publish.
+**Never commit secrets.** The service key and Resend key live only in Supabase. The address in `config.js` is safe to publish.
 
 ## Tests
 
@@ -96,3 +95,4 @@ node --test tests/contact.test.ts
 | --- | --- | --- |
 | `CONTACT_TO` | `ftc.fiftyone@gmail.com` | Where alerts go |
 | `CONTACT_FROM` | `Singularity 51 Website <onboarding@resend.dev>` | Sender shown on alerts. Needs a verified domain to change. |
+| `CONTACT_SALT` | The service role key | Salts the IP hashes used for rate limiting |
