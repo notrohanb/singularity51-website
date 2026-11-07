@@ -1,0 +1,6 @@
+project_id = "singularity51-website"
+
+# The Contact form is public, so visitors have no login token. The function
+# protects itself with an origin allowlist, a honeypot, and rate limits.
+[functions.contact]
+verify_jwt = false
