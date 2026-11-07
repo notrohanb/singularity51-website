@@ -771,14 +771,11 @@ footer::before{opacity:var(--undertone)!important}
 .sec:has(> .stats:last-child)+.sec-flush>.cloth-band:first-child{margin-top:-24px}
 
 /* contact: email first, then the form on a solid card */
-.mail-hero{padding:32px;border-radius:var(--radius-lg);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);margin-bottom:20px}
-.mh-l{font-size:0.9375rem;color:var(--fg-muted);margin-bottom:6px}
-.mh-a{font-size:clamp(1.375rem,2.6vw,1.875rem);font-weight:700;letter-spacing:-0.025em;color:var(--fg);margin-bottom:18px;overflow-wrap:anywhere}
 .form-card{padding:32px;border-radius:var(--radius-lg);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
 .form-card .form-note{margin:0 0 22px;color:var(--fg-muted)}
 .form-card .fl{color:var(--fg)}
 .form-card .fi,.form-card .fs,.form-card .ft{background-color:var(--bg)}
-@media(max-width:600px){.mail-hero,.form-card{padding:24px 20px}}
+@media(max-width:600px){.form-card{padding:24px 20px}}
 
 /* CAD models note */
 .models-note{margin:72px 0 0}
@@ -1383,7 +1380,6 @@ footer::before{opacity:calc(var(--undertone) * .45)!important}
   <div class="sec sec-flush">
     <section class="cloth-band cloth-quiet"><div class="cog">
       <div>
-        <div class="mail-hero"><p class="mh-l" data-en="The fastest way to reach us" data-es="La forma más rápida de contactarnos">The fastest way to reach us</p><p class="mh-a"><span style="user-select:all">ftc.fiftyone@gmail.com</span></p><button type="button" class="btn btn-h" onclick="var b=this;s51Copy('ftc.fiftyone@gmail.com',function(ok){b.textContent=ok?(lang==='es'?'Copiado':'Copied'):(lang==='es'?'Selecciona el correo de arriba':'Select the address above')})" data-en="Copy email address" data-es="Copiar correo">Copy email address</button></div>
         <div class="form-card"><p class="form-note" id="cnote" data-en="Prefer a form? Fill this out and we'll copy your message so you can paste it into an email. This page can't send email by itself." data-es="¿Prefieres un formulario? Llénalo y copiaremos tu mensaje para que lo pegues en un correo. Esta página no puede enviar correos por sí sola.">Prefer a form? Fill this out and we'll copy your message so you can paste it into an email. This page can't send email by itself.</p>
         <form onsubmit="event.preventDefault();contactSubmit(this)" id="cf">
           <div class="hp" aria-hidden="true"><label for="cw">Leave this field empty</label><input type="text" id="cw" name="website" tabindex="-1" autocomplete="off"></div>
@@ -1618,7 +1614,7 @@ var CONTACT_ENDPOINT=window.S51_CONTACT_ENDPOINT||'';
 if(CONTACT_ENDPOINT){(function(){
   var b=document.getElementById('cb'),n=document.getElementById('cnote');
   if(b){b.classList.replace('btn-o','btn-p');b.setAttribute('data-en','Send Message');b.setAttribute('data-es','Enviar Mensaje');b.textContent='Send Message'}
-  if(n){var en="Prefer a form? Send your message here and it goes straight to the team.";n.setAttribute('data-en',en);n.setAttribute('data-es','¿Prefieres un formulario? Envía tu mensaje aquí y llegará directo al equipo.');n.textContent=en}
+  if(n){var en="Send us a message and it goes straight to the team.";n.setAttribute('data-en',en);n.setAttribute('data-es','Envíanos un mensaje y llegará directo al equipo.');n.textContent=en}
 })()}
 function contactSubmit(f){
   if(!CONTACT_ENDPOINT){contactCopy(f);return}
@@ -1804,25 +1800,33 @@ function toggleLang(){
   setTimeout(joinBands,50);
 }
 
-function toggleTheme(){
-  var states=['system','dark','light'];
-  var idx=states.indexOf(themeState);
-  themeState=states[(idx+1)%3];
-  if(themeState==='system'){document.documentElement.removeAttribute('data-theme')}
-  else{document.documentElement.setAttribute('data-theme',themeState)}
-  var icon=document.getElementById('themeIcon');
-  if(themeState==='dark'){
-    icon.innerHTML='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-  }else if(themeState==='light'){
-    icon.innerHTML='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-  }else{
-    icon.innerHTML='<circle cx="12" cy="12" r="4" opacity="0.5"/><path d="M12 2v2m0 16v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M2 12h2m16 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42"/>';
+function shownTheme(){
+  var t=document.documentElement.getAttribute('data-theme');
+  if(t==='light'||t==='dark')return t;
+  return window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+}
+function syncThemeButton(){
+  var next=shownTheme()==='dark'?'light':'dark';
+  var icon=document.getElementById('themeIcon'),btn=document.getElementById('themeBtn');
+  if(icon)icon.innerHTML=next==='light'?'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>':'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  if(btn){
+    var en=next==='light'?'Switch to light mode':'Switch to dark mode',es=next==='light'?'Cambiar a modo claro':'Cambiar a modo oscuro';
+    btn.setAttribute('data-aria-en',en);btn.setAttribute('data-aria-es',es);
+    btn.setAttribute('aria-label',(typeof lang!=='undefined'&&lang==='es')?es:en);btn.title=btn.getAttribute('aria-label');
   }
+}
+function toggleTheme(){
+  themeState=shownTheme()==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',themeState);
   try{localStorage.setItem('s51-theme',themeState)}catch(e){}
+  syncThemeButton();
 }
 
 (function restoreTheme(){
-  try{var s=localStorage.getItem('s51-theme');if(s){themeState=s;if(s!=='system')document.documentElement.setAttribute('data-theme',s)}}catch(e){}
+  try{var s=localStorage.getItem('s51-theme');if(s==='light'||s==='dark'){themeState=s;document.documentElement.setAttribute('data-theme',s)}}catch(e){}
+  syncThemeButton();
+  // with no saved choice the page follows the device, so keep the icon in step with it
+  if(window.matchMedia){var mq=matchMedia('(prefers-color-scheme: light)'),f=function(){if(themeState==='system')syncThemeButton()};if(mq.addEventListener)mq.addEventListener('change',f);else if(mq.addListener)mq.addListener(f)}
 })();
 
 var toastTimer;
