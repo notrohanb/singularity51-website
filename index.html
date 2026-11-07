@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <title>Singularity 51 | FTC Team #51</title>
 <meta name="description" content="FTC Team #51 — Engineering excellence through collaboration, innovation, and community impact.">
 <meta property="og:title" content="Singularity 51 | FTC Robotics">
@@ -1002,6 +1002,7 @@ footer::before{opacity:calc(var(--undertone) * .45)!important}
 :root[data-theme="light"] .stats .stat-n{color:#F2C744;-webkit-text-stroke:0.075em #3B1E66;paint-order:stroke fill}
 </style>
 <link rel="icon" href="assets/46fe7c81c6a16f0d38da6a1a8b544969.png">
+<script>try{if(localStorage.getItem('s51-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <script src="config.js"></script>
 </head><body>
 <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript><a href="#" class="skip-link" onclick="var t=document.querySelector('.page.active .pht,.page.active h1');if(t){t.setAttribute('tabindex','-1');t.focus()}return false">Skip to content</a>
@@ -1687,7 +1688,7 @@ var members=[
   {name:"Paulo Mazarakis",role:"Prog Member",tags:["Prog"]}
 ];
 var lang='en';
-var themeState='system';
+var themeState='dark';
 
 var roleEs={Captain:'Capitán','Admin Lead':'Líder Admin','Admin Member':'Miembro Admin','CAD Lead':'Líder CAD','CAD Member':'Miembro CAD','Prog Lead':'Líder de Programación','Prog Member':'Miembro de Programación'};
 var tagEs={Leadership:'Liderazgo',Admin:'Admin',CAD:'CAD',Prog:'Prog'};
@@ -1823,10 +1824,11 @@ function toggleTheme(){
 }
 
 (function restoreTheme(){
-  try{var s=localStorage.getItem('s51-theme');if(s==='light'||s==='dark'){themeState=s;document.documentElement.setAttribute('data-theme',s)}}catch(e){}
+  // the site starts dark; a visitor's saved choice wins
+  var s=null;try{s=localStorage.getItem('s51-theme')}catch(e){}
+  themeState=s==='light'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',themeState);
   syncThemeButton();
-  // with no saved choice the page follows the device, so keep the icon in step with it
-  if(window.matchMedia){var mq=matchMedia('(prefers-color-scheme: light)'),f=function(){if(themeState==='system')syncThemeButton()};if(mq.addEventListener)mq.addEventListener('change',f);else if(mq.addListener)mq.addListener(f)}
 })();
 
 var toastTimer;
